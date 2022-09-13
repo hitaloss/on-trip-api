@@ -72,8 +72,8 @@ export const mockedAccommodationPatch: IAccommodationRequestPatch = {
 };
 
 export const mockedAccommodationInvalidPatch = {
-  description: 1548,
-  dailyPrice: "300",
+  description: "text",
+  dailyPrice: "batata",
 };
 
 export const mockedAccommodationTooLargePatch = {

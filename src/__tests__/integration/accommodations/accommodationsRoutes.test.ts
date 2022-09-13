@@ -352,7 +352,7 @@ describe("/accommodations", () => {
     expect(response.body.accommodation).toHaveProperty("verifiedByAdm");
     expect(response.body.accommodation).toHaveProperty("specialOffer");
     expect(response.body.accommodation).toHaveProperty("type");
-    expect(response.body.accommodation).toHaveProperty("user");
+    expect(response.body.accommodation).toHaveProperty("owner");
     expect(response.body.accommodation).toHaveProperty("capacity");
     expect(response.body.accommodation).toHaveProperty("category");
   });
@@ -476,7 +476,7 @@ describe("/accommodations", () => {
       .send(mockedAccommodationTooLargePatch)
       .set("Authorization", `Bearer ${genericUserToken}`);
 
-    expect(response.status).toBe(413);
+    expect(response.status).toBe(400);
     expect(response.body).toHaveProperty("status", "Error");
     expect(response.body).toHaveProperty("message");
   });
@@ -484,7 +484,7 @@ describe("/accommodations", () => {
   test("PATCH /accommodations/:id - Should not be able to update an accommodation without having any changes in any field", async () => {
     const createAccommodResponse = await request(app)
       .post("/accommodations")
-      .send(mockedAccommodation3)
+      .send(genericAccommodation)
       .set("Authorization", `Bearer ${genericUserToken}`);
 
     const accommodationId = createAccommodResponse.body.accommodation.id;

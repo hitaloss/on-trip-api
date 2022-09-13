@@ -10,6 +10,10 @@ import {
   validateAccommodationCreate,
 } from "../middlewares/validateAccommodationCreate.middleware";
 import { admOrOwnerAuthMiddleware } from "../middlewares/admOrOwnerAuth.middleware";
+import {
+  accommodationPatchSchema,
+  validateAccommodationPatch,
+} from "../middlewares/validateAccommodationPatch";
 
 const routes = Router();
 
@@ -21,14 +25,20 @@ const accommodationsRoutes = () => {
     accommodationCreateController
   );
   routes.get("", accommodationReadAllController);
-  routes.get("/:id", authUserMiddleware, accommodationReadOneController);
+  routes.get("/:id", accommodationReadOneController);
   routes.patch(
     "/:id",
     authUserMiddleware,
     admOrOwnerAuthMiddleware,
+    validateAccommodationPatch(accommodationPatchSchema),
     accommodationUpdateController
   );
-  routes.delete("/:id", authUserMiddleware, accommodationDeleteController);
+  routes.delete(
+    "/:id",
+    authUserMiddleware,
+    admOrOwnerAuthMiddleware,
+    accommodationDeleteController
+  );
   return routes;
 };
 
