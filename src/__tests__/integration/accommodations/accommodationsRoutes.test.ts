@@ -68,6 +68,8 @@ describe("/accommodations", () => {
       .post("/users")
       .send(mockedUser3);
 
+    console.log(createGenericUser2.body);
+
     genericUserId2 = createGenericUser2.body.user.id;
 
     const loginGenericUser2 = await request(app)
