@@ -30,7 +30,7 @@ const accommodationUpdateService = async (
   const accommodation = await accommodationRepository.findOneBy({ id: id });
   if (!accommodation) throw new AppError(404, "Accommodation not found");
 
-  const updatedAccommodation = accommodationRepository.create({
+  const updatedAccommodation = {
     name: name ? name : accommodation.name,
     description: description ? description : accommodation.description,
     dailyPrice: dailyPrice ? dailyPrice : accommodation.dailyPrice,
@@ -38,7 +38,7 @@ const accommodationUpdateService = async (
     specialOffer: specialOffer ? specialOffer : accommodation.specialOffer,
     capacity: capacity ? capacity : accommodation.capacity,
     type: type ? type : accommodation.type,
-  });
+  };
 
   const accommodationCheck = await accommodationRepository.findOne({
     where: {
@@ -57,7 +57,11 @@ const accommodationUpdateService = async (
 
   await accommodationRepository.update(id, updatedAccommodation);
 
-  return updatedAccommodation;
+  const listAccommodationUpdated = await accommodationRepository.findOneBy({
+    id: id,
+  });
+
+  return listAccommodationUpdated!;
 };
 
 export default accommodationUpdateService;

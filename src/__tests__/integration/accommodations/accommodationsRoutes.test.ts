@@ -372,8 +372,6 @@ describe("/accommodations", () => {
   test("PATCH /accommodations/:id - Should be able to update an accommodation", async () => {
     const accommodations = await request(app).get("/accommodations");
 
-    console.log(accommodations.body);
-
     const accommodationId = accommodations.body.accommodations[0].id;
 
     const response = await request(app)
@@ -395,7 +393,7 @@ describe("/accommodations", () => {
     expect(response.body.accommodation).toHaveProperty("verifiedByAdm");
     expect(response.body.accommodation).toHaveProperty("specialOffer");
     expect(response.body.accommodation).toHaveProperty("type");
-    expect(response.body.accommodation).toHaveProperty("user");
+    expect(response.body.accommodation).toHaveProperty("owner");
     expect(response.body.accommodation).toHaveProperty("capacity");
     expect(response.body.accommodation).toHaveProperty("category");
   });
@@ -420,12 +418,12 @@ describe("/accommodations", () => {
   test("PATCH /accommodations/:id - Should not be able to update an accommodation with invalid token", async () => {
     const accommodations = await request(app).get("/accommodations");
 
-    const accommodationId = accommodations.body[0].data.id;
+    const accommodationId = accommodations.body.accommodations[0].id;
 
     const response = await request(app)
       .patch(`/accommodations/${accommodationId}`)
       .send(mockedAccommodationPatch)
-      .set("Authorization", `Bearer ${genericUserToken}48762348`);
+      .set("Authorization", `Bearer 48762348`);
 
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty("status", "Error");
@@ -441,6 +439,7 @@ describe("/accommodations", () => {
       .patch(`/accommodations/${accommodationId}`)
       .send(mockedAccommodationPatch)
       .set("Authorization", `Bearer ${genericUserToken2}`);
+    console.log(response.body);
 
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty("status", "Error");
@@ -501,7 +500,7 @@ describe("/accommodations", () => {
     );
   });
 
-  test("PATCH /accommodations/:id - Should not be able to update an accommodation that does exist", async () => {
+  test("PATCH /accommodations/:id - Should not be able to update an accommodation that does not exist", async () => {
     const response = await request(app)
       .patch("/accommodations/2738ajyh6863f565865sfg")
       .send(mockedAccommodationPatch)

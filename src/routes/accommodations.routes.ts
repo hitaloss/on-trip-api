@@ -5,6 +5,7 @@ import accommodationReadAllController from "../controllers/accommodations/accomm
 import accommodationReadOneController from "../controllers/accommodations/accommodationReadOne.controller";
 import accommodationUpdateController from "../controllers/accommodations/accommodationUpdate.controller";
 import { authUserMiddleware } from "../middlewares/authUser.middleware";
+import { admOrOwnerAuthMiddleware } from "../middlewares/admOrOwnerAuth.middleware";
 
 const routes = Router();
 
@@ -12,7 +13,12 @@ const accommodationsRoutes = () => {
   routes.post("", authUserMiddleware, accommodationCreateController);
   routes.get("", accommodationReadAllController);
   routes.get("/:id", authUserMiddleware, accommodationReadOneController);
-  routes.patch("/:id", authUserMiddleware, accommodationUpdateController);
+  routes.patch(
+    "/:id",
+    authUserMiddleware,
+    admOrOwnerAuthMiddleware,
+    accommodationUpdateController
+  );
   routes.delete("/:id", authUserMiddleware, accommodationDeleteController);
   return routes;
 };
